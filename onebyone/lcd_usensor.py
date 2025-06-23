@@ -2,13 +2,13 @@ import time
 import RPi.GPIO as GPIO
 from RPLCD.i2c import CharLCD
 
-# --- Pin Setup ---
-TRIG_PIN = 23
-ECHO_PIN = 24
+# --- GPIO Pins for Ultrasonic ---
+TRIG = 23
+ECHO = 24
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(TRIG_PIN, GPIO.OUT)
-GPIO.setup(ECHO_PIN, GPIO.IN)
-GPIO.output(TRIG_PIN, False)
+GPIO.setup(TRIG, GPIO.OUT)
+GPIO.setup(ECHO, GPIO.IN)
+GPIO.output(TRIG, False)
 GPIO.setwarnings(False)
 
 # --- LCD Setup ---
@@ -29,42 +29,38 @@ except Exception as e:
 
 # --- Distance Function ---
 def get_distance():
-    GPIO.output(TRIG_PIN, True)
+    GPIO.output(TRIG, True)
     time.sleep(0.00001)
-    GPIO.output(TRIG_PIN, False)
+    GPIO.output(TRIG, False)
 
-    start_time = time.time()
-    stop_time = time.time()
+    while GPIO.input(ECHO) == 0:
+        pulse_start = time.time()
+    while GPIO.input(ECHO) == 1:
+        pulse_end = time.time()
 
-    while GPIO.input(ECHO_PIN) == 0:
-        start_time = time.time()
-    while GPIO.input(ECHO_PIN) == 1:
-        stop_time = time.time()
+    duration = pulse_end - pulse_start
+    distance_cm = (duration * 34300) / 2
+    return round(distance_cm, 2)
 
-    elapsed = stop_time - start_time
-    distance = (elapsed * 34300) / 2
-    return round(distance, 2)
-
-# --- LCD Display Function ---
-def lcd_message(line1="", line2=""):
+# --- LCD Display Helper ---
+def show_distance_on_lcd(dist):
     if lcd_ready:
         lcd.clear()
-        lcd.write_string(line1.ljust(16))
+        lcd.write_string("Distance:")
         lcd.crlf()
-        lcd.write_string(line2.ljust(16))
+        lcd.write_string(f"{dist:.2f} cm")
     else:
-        print(line1)
-        print(line2)
+        print(f"Distance: {dist:.2f} cm")
 
 # --- Main Loop ---
 try:
     while True:
-        dist = get_distance()
-        print(f"Distance: {dist} cm")
-        lcd_message("Ultrasonic:", f"{dist} cm")
+        distance = get_distance()
+        show_distance_on_lcd(distance)
         time.sleep(1)
 
 except KeyboardInterrupt:
-    lcd.clear()
-    lcd.write_string("Goodbye!")
+    if lcd_ready:
+        lcd.clear()
+        lcd.write_string("Shutting down...")
     GPIO.cleanup()
