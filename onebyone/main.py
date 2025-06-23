@@ -120,22 +120,21 @@ try:
 
             while time.time() - start_time < 10:
                 try:
-                    card_id = reader.read_id_no_block()
-                    if card_id:
-                        print(f"Card scanned! ID: {card_id}")
-                        lcd_message("RFID Detected", f"ID: {card_id}")
-                        set_leds(red=False, green=True, yellow=False)
+                    card_id = reader.read_id()
+                    print(f"Card scanned! ID: {card_id}")
+                    lcd_message("RFID Detected", f"ID: {card_id}")
+                    set_leds(red=False, green=True, yellow=False)
 
-                        lcd_message("Access Granted", "Opening gate")
-                        servo.max()
-                        time.sleep(3)
+                    lcd_message("Access Granted", "Opening gate")
+                    servo.max()
+                    time.sleep(3)
 
-                        lcd_message("Returning Arm", "to 90 deg")
-                        servo.mid()
-                        time.sleep(1)
+                    lcd_message("Returning Arm", "to 90 deg")
+                    servo.mid()
+                    time.sleep(1)
 
-                        scanned = True
-                        break
+                    scanned = True
+                    break
                 except Exception as e:
                     print("RFID read error:", e)
 
