@@ -106,5 +106,3 @@ Optional: An 8x8 MAX7219 LED Matrix can be included to display simple visual sta
 | LCD           | I2C SCL             | 3    | 5            |
 
 ---
-
-> You can paste this entire block directly into your `README.md` or Obsidian vault. It will render correctly as Markdown tables.
