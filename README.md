@@ -10,6 +10,13 @@ This project implements a smart access control system using a Raspberry Pi, inte
 - 16x2 I2C LCD – displays messages such as "User Detected" or "Access Granted"
 - LED Indicators – shows status (Red for error, Green for granted, Yellow for standby)
 
+### 📸 Project Demo Setup
+
+![RFID Gatearm Setup](./truck.jpg)
+
+*Above: Smart RFID gate system with Raspberry Pi, MFRC522 RFID module, ultrasonic sensor, servo motor for the barrier, and a 16x2 I2C LCD displaying "User Detected". A toy truck is shown approaching the gate as a demonstration vehicle.*
+
+
 ### System Workflow
 
 1. A user approaches the gate and the ultrasonic sensor detects proximity (typically 5 cm or less).
