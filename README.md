@@ -10,7 +10,7 @@ This project implements a smart access control system using a Raspberry Pi, inte
 - 16x2 I2C LCD – displays messages such as "User Detected" or "Access Granted"
 - LED Indicators – shows status (Red for error, Green for granted, Yellow for standby)
 
-### 📸 Project Demo Setup
+### Project Demo Setup
 
 ![RFID Gatearm Setup](./truck.jpg)
 
